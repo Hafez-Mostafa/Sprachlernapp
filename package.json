@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "start": "vite",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
@@ -11,6 +12,7 @@
     "generate:types": "openapi-typescript ./openapi.yaml -o ./src/types/api.ts"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.101.4",
     "axios": "^1.19.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",

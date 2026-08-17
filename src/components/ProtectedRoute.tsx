@@ -8,9 +8,7 @@ interface ProtectedRouteProps {
   allowedRoles?: UserRole[];
 }
 
-/**
- * Wrapper-Komponente für geschützte Routen.
- * 
+/* Wrapper-Komponente für geschützte Routen. 
  * Beispielsyntax in deinen Routen:
  * <ProtectedRoute allowedRoles={["admin"]}>
  *   <AdminDashboard />
@@ -41,3 +39,14 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // 4. Alles gültig -> Die geschützte Seite wird gerendert
   return <>{children}</>;
 };
+
+
+
+
+
+
+
+
+
+
+
