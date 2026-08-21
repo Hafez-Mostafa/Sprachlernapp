@@ -1,0 +1,81 @@
+{
+  "app": {
+    "name": "LernApp"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "children": "Meine Kinder",
+    "admin": "Verwaltung",
+    "logout": "Abmelden"
+  },
+  "auth": {
+    "loginTitle": "Anmelden",
+    "welcomeTitle": "Willkommen!",
+    "subtitle": "Eltern-Bereich für Sprachförderung",
+    "email": "E-Mail-Adresse",
+    "password": "Passwort",
+    "confirmPassword": "Passwort bestätigen",
+    "loginButton": "Anmelden",
+    "createAccountButton": "Neues Konto erstellen",
+    "dsgvoLabel": "DSGVO-Richtlinien akzeptieren",
+    "dsgvoRequired": "Bitte akzeptiere die DSGVO-Richtlinien, um fortzufahren.",
+    "registerTitle": "Konto erstellen",
+    "registerButton": "Registrieren",
+    "backToLogin": "Bereits ein Konto? Anmelden",
+    "passwordMismatch": "Die Passwörter stimmen nicht überein.",
+    "emailAlreadyRegistered": "Diese E-Mail-Adresse ist bereits registriert.",
+    "registrationValidationError": "Bitte überprüfe deine Eingaben (z. B. Passwort zu kurz).",
+    "loggedInAs": "Eingeloggt als {{email}}",
+    "invalidCredentials": "E-Mail oder Passwort ist falsch.",
+    "sessionExpired": "Deine Sitzung ist abgelaufen. Bitte melde dich erneut an."
+  },
+  "children": {
+    "title": "Kinder-Übersicht",
+    "whoIsLearning": "Wer lernt heute?",
+    "tapYourPicture": "Tippe auf dein Bild!",
+    "guardiansOnly": "Nur für Eltern",
+    "empty": "Noch keine Kinderprofile angelegt.",
+    "add": "Kind hinzufügen",
+    "nickname": "Spitzname",
+    "language": "Lernsprache",
+    "avatar": "Avatar",
+    "confirmDelete": "Kinderprofil \"{{nickname}}\" wirklich löschen?"
+  },
+  "dashboard": {
+    "welcome": "Willkommen zurück, {{name}}!",
+    "progressOverview": "Lernfortschritt im Überblick",
+    "yourWorlds": "Deine Welten",
+    "continueLearning": "Weiterlernen",
+    "start": "Starten",
+    "noExercises": "Noch keine Übungen verfügbar."
+  },
+
+  "exercise": {
+    "question": "Frage",
+    "yourAnswer": "Deine Antwort",
+    "submit": "Antworten",
+    "correct": "Super gemacht!",
+    "pointsForYou": "Punkte für dich!",
+    "practicePronunciation": "Übe deine Aussprache (optional)",
+    "nextTask": "Nächste Aufgabe",
+    "incorrectFirstTry": "Fast richtig! Versuche es noch einmal.",
+    "incorrectSecondTry": "Richtige Answer is {{answer}}.",
+    "tryAgain": "Nochmal probieren",
+    "hereIsTheSolution": "Hier ist die Lösung:",
+    "listenSolutionAndContinue": "Lösung anhören & Weiter"
+  },
+  "common": {
+    "loading": "Wird geladen…",
+    "error": "Etwas ist schiefgelaufen.",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "back": "Zurück"
+  },
+  "language": {
+    "switchLabel": "Sprache",
+    "de": "Deutsch",
+    "ar": "Arabisch"
+  }
+}

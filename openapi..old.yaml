@@ -49,15 +49,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/LoginRequest"
+              $ref: '#/components/schemas/LoginRequest'
       responses:
-        "200":
+        '200':
           description: Anmeldung erfolgreich
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AuthResponse"
-        "401":
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
           description: Ungültige Zugangsdaten
 
   /auth/admin-login:
@@ -72,15 +72,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/LoginRequest"
+              $ref: '#/components/schemas/LoginRequest'
       responses:
-        "200":
+        '200':
           description: Anmeldung erfolgreich
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AdminAuthResponse"
-        "401":
+                $ref: '#/components/schemas/AdminAuthResponse'
+        '401':
           description: Ungültige Zugangsdaten
 
   # ============================================================
@@ -95,17 +95,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/GuardianRegisterRequest"
+              $ref: '#/components/schemas/GuardianRegisterRequest'
       responses:
-        "201":
+        '201':
           description: Konto erstellt
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Guardian"
-        "400":
+                $ref: '#/components/schemas/Guardian'
+        '400':
           description: Validierungsfehler (z. B. Passwort zu kurz)
-        "409":
+        '409':
           description: E-Mail bereits registriert
 
   /guardians/me:
@@ -114,13 +114,13 @@ paths:
       summary: Eigenes Guardian-Profil abrufen
       security: [{ bearerAuth: [] }]
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Guardian"
-        "401":
+                $ref: '#/components/schemas/Guardian'
+        '401':
           description: Nicht authentifiziert
     patch:
       tags: [Guardians]
@@ -131,24 +131,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/GuardianUpdateRequest"
+              $ref: '#/components/schemas/GuardianUpdateRequest'
       responses:
-        "200":
+        '200':
           description: Aktualisiert
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Guardian"
-        "401":
+                $ref: '#/components/schemas/Guardian'
+        '401':
           description: Nicht authentifiziert
     delete:
       tags: [Guardians]
       summary: Eigenes Guardian-Konto löschen (kaskadiert auf Kinderprofile)
       security: [{ bearerAuth: [] }]
       responses:
-        "204":
+        '204':
           description: Gelöscht
-        "401":
+        '401':
           description: Nicht authentifiziert
 
   # ============================================================
@@ -160,14 +160,14 @@ paths:
       summary: Alle Kinderprofile des eingeloggten Guardians
       security: [{ bearerAuth: [] }]
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ChildProfile"
+                  $ref: '#/components/schemas/ChildProfile'
     post:
       tags: [ChildProfiles]
       summary: Neues Kinderprofil für den eingeloggten Guardian anlegen
@@ -177,18 +177,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ChildProfileCreateRequest"
+              $ref: '#/components/schemas/ChildProfileCreateRequest'
       responses:
-        "201":
+        '201':
           description: Erstellt
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ChildProfile"
+                $ref: '#/components/schemas/ChildProfile'
 
   /children/{childId}:
     parameters:
-      - $ref: "#/components/parameters/ChildId"
+      - $ref: '#/components/parameters/ChildId'
     get:
       tags: [ChildProfiles]
       summary: >
@@ -196,15 +196,15 @@ paths:
         Kinderprofil gehört (Besitzer-Prüfung serverseitig).
       security: [{ bearerAuth: [] }]
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ChildProfile"
-        "403":
+                $ref: '#/components/schemas/ChildProfile'
+        '403':
           description: Kinderprofil gehört einem anderen Guardian
-        "404":
+        '404':
           description: Nicht gefunden
     patch:
       tags: [ChildProfiles]
@@ -215,33 +215,33 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ChildProfileUpdateRequest"
+              $ref: '#/components/schemas/ChildProfileUpdateRequest'
       responses:
-        "200":
+        '200':
           description: Aktualisiert
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ChildProfile"
-        "403":
+                $ref: '#/components/schemas/ChildProfile'
+        '403':
           description: Kinderprofil gehört einem anderen Guardian
-        "404":
+        '404':
           description: Nicht gefunden
     delete:
       tags: [ChildProfiles]
       summary: Kinderprofil löschen (kaskadiert auf Lernfortschritt)
       security: [{ bearerAuth: [] }]
       responses:
-        "204":
+        '204':
           description: Gelöscht
-        "403":
+        '403':
           description: Kinderprofil gehört einem anderen Guardian
-        "404":
+        '404':
           description: Nicht gefunden
 
   /children/{childId}/progress:
     parameters:
-      - $ref: "#/components/parameters/ChildId"
+      - $ref: '#/components/parameters/ChildId'
     get:
       tags: [LearningProgress]
       summary: Lernfortschritt eines Kindes abrufen
@@ -253,14 +253,14 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/LearningProgress"
+                  $ref: '#/components/schemas/LearningProgress'
 
   # ============================================================
   # ADMINS
@@ -274,13 +274,13 @@ paths:
         hier abgelehnt.
       security: [{ adminBearerAuth: [] }]
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Admin"
-        "401":
+                $ref: '#/components/schemas/Admin'
+        '401':
           description: Nicht authentifiziert oder falscher Token-Typ
 
   # ============================================================
@@ -304,14 +304,14 @@ paths:
           schema:
             type: boolean
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Exercise"
+                  $ref: '#/components/schemas/Exercise'
     post:
       tags: [Exercises]
       summary: Neue Lernübung anlegen
@@ -321,29 +321,29 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ExerciseCreateRequest"
+              $ref: '#/components/schemas/ExerciseCreateRequest'
       responses:
-        "201":
+        '201':
           description: Erstellt
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Exercise"
+                $ref: '#/components/schemas/Exercise'
 
   /exercises/{exerciseId}:
     parameters:
-      - $ref: "#/components/parameters/ExerciseId"
+      - $ref: '#/components/parameters/ExerciseId'
     get:
       tags: [Exercises]
       summary: Einzelne Übung abrufen
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Exercise"
-        "404":
+                $ref: '#/components/schemas/Exercise'
+        '404':
           description: Nicht gefunden
     patch:
       tags: [Exercises]
@@ -354,37 +354,37 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ExerciseUpdateRequest"
+              $ref: '#/components/schemas/ExerciseUpdateRequest'
       responses:
-        "200":
+        '200':
           description: Aktualisiert
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Exercise"
+                $ref: '#/components/schemas/Exercise'
     delete:
       tags: [Exercises]
       summary: Übung löschen (kaskadiert auf Tasks)
       security: [{ bearerAuth: [] }]
       responses:
-        "204":
+        '204':
           description: Gelöscht
 
   /exercises/{exerciseId}/tasks:
     parameters:
-      - $ref: "#/components/parameters/ExerciseId"
+      - $ref: '#/components/parameters/ExerciseId'
     get:
       tags: [Tasks]
       summary: Aufgaben einer Übung auflisten (sortiert nach position)
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Task"
+                  $ref: '#/components/schemas/Task'
     post:
       tags: [Tasks]
       summary: Neue Aufgabe zu einer Übung hinzufügen
@@ -394,32 +394,32 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TaskCreateRequest"
+              $ref: '#/components/schemas/TaskCreateRequest'
       responses:
-        "201":
+        '201':
           description: Erstellt
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Task"
+                $ref: '#/components/schemas/Task'
 
   # ============================================================
   # TASKS
   # ============================================================
   /tasks/{taskId}:
     parameters:
-      - $ref: "#/components/parameters/TaskId"
+      - $ref: '#/components/parameters/TaskId'
     get:
       tags: [Tasks]
       summary: Einzelne Aufgabe abrufen (inkl. zugeordneter Wörter)
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TaskDetail"
-        "404":
+                $ref: '#/components/schemas/TaskDetail'
+        '404':
           description: Nicht gefunden
     patch:
       tags: [Tasks]
@@ -430,37 +430,37 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/TaskUpdateRequest"
+              $ref: '#/components/schemas/TaskUpdateRequest'
       responses:
-        "200":
+        '200':
           description: Aktualisiert
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Task"
+                $ref: '#/components/schemas/Task'
     delete:
       tags: [Tasks]
       summary: Aufgabe löschen
       security: [{ bearerAuth: [] }]
       responses:
-        "204":
+        '204':
           description: Gelöscht
 
   /tasks/{taskId}/words:
     parameters:
-      - $ref: "#/components/parameters/TaskId"
+      - $ref: '#/components/parameters/TaskId'
     get:
       tags: [Tasks]
       summary: Wörter einer Aufgabe auflisten (sortiert nach position)
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/WordTaskEntry"
+                  $ref: '#/components/schemas/WordTaskEntry'
     post:
       tags: [Tasks]
       summary: Wort einer Aufgabe zuordnen
@@ -479,24 +479,24 @@ paths:
                 position:
                   type: integer
       responses:
-        "201":
+        '201':
           description: Zuordnung erstellt
 
   /tasks/{taskId}/words/{wordId}:
     parameters:
-      - $ref: "#/components/parameters/TaskId"
-      - $ref: "#/components/parameters/WordId"
+      - $ref: '#/components/parameters/TaskId'
+      - $ref: '#/components/parameters/WordId'
     delete:
       tags: [Tasks]
       summary: Wort-Zuordnung von einer Aufgabe entfernen
       security: [{ bearerAuth: [] }]
       responses:
-        "204":
+        '204':
           description: Entfernt
 
   /tasks/{taskId}/submit:
     parameters:
-      - $ref: "#/components/parameters/TaskId"
+      - $ref: '#/components/parameters/TaskId'
     post:
       tags: [LearningProgress]
       summary: Antwort einreichen und Fortschritt speichern
@@ -506,14 +506,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SubmitAnswerRequest"
+              $ref: '#/components/schemas/SubmitAnswerRequest'
       responses:
-        "200":
+        '200':
           description: Ergebnis inkl. aktualisiertem Fortschritt
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/LearningProgress"
+                $ref: '#/components/schemas/LearningProgress'
 
   # ============================================================
   # WORDS
@@ -533,14 +533,14 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Word"
+                  $ref: '#/components/schemas/Word'
     post:
       tags: [Words]
       summary: Neues Wort anlegen
@@ -550,29 +550,29 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/WordCreateRequest"
+              $ref: '#/components/schemas/WordCreateRequest'
       responses:
-        "201":
+        '201':
           description: Erstellt
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Word"
+                $ref: '#/components/schemas/Word'
 
   /words/{wordId}:
     parameters:
-      - $ref: "#/components/parameters/WordId"
+      - $ref: '#/components/parameters/WordId'
     get:
       tags: [Words]
       summary: Wort abrufen (inkl. Bild- und Audio-Referenz)
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/WordDetail"
-        "404":
+                $ref: '#/components/schemas/WordDetail'
+        '404':
           description: Nicht gefunden
     patch:
       tags: [Words]
@@ -583,23 +583,23 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/WordUpdateRequest"
+              $ref: '#/components/schemas/WordUpdateRequest'
       responses:
-        "200":
+        '200':
           description: Aktualisiert
     delete:
       tags: [Words]
       summary: Wort löschen (nur möglich, wenn in keiner Aufgabe verwendet)
       security: [{ bearerAuth: [] }]
       responses:
-        "204":
+        '204':
           description: Gelöscht
-        "409":
+        '409':
           description: Wort wird noch in mindestens einer Aufgabe verwendet
 
   /words/{wordId}/image:
     parameters:
-      - $ref: "#/components/parameters/WordId"
+      - $ref: '#/components/parameters/WordId'
     put:
       tags: [Words]
       summary: Bild für ein Wort setzen/ersetzen (1:1)
@@ -609,25 +609,25 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ImageUpsertRequest"
+              $ref: '#/components/schemas/ImageUpsertRequest'
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Image"
+                $ref: '#/components/schemas/Image'
     delete:
       tags: [Words]
       summary: Bild eines Wortes entfernen
       security: [{ bearerAuth: [] }]
       responses:
-        "204":
+        '204':
           description: Gelöscht
 
   /words/{wordId}/audio:
     parameters:
-      - $ref: "#/components/parameters/WordId"
+      - $ref: '#/components/parameters/WordId'
     put:
       tags: [Words]
       summary: Audiodatei für ein Wort setzen/ersetzen (1:1)
@@ -637,20 +637,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AudioUpsertRequest"
+              $ref: '#/components/schemas/AudioUpsertRequest'
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Audio"
+                $ref: '#/components/schemas/Audio'
     delete:
       tags: [Words]
       summary: Audiodatei eines Wortes entfernen
       security: [{ bearerAuth: [] }]
       responses:
-        "204":
+        '204':
           description: Gelöscht
 
   # ============================================================
@@ -661,42 +661,42 @@ paths:
       tags: [Lookups]
       summary: Verfügbare Sprachen auflisten
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/LookupItem"
+                  $ref: '#/components/schemas/LookupItem'
 
   /exercise-types:
     get:
       tags: [Lookups]
       summary: Verfügbare Übungstypen auflisten
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/LookupItem"
+                  $ref: '#/components/schemas/LookupItem'
 
   /progress-statuses:
     get:
       tags: [Lookups]
       summary: Verfügbare Fortschrittsstatus auflisten
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/LookupItem"
+                  $ref: '#/components/schemas/LookupItem'
 
 components:
   securitySchemes:
@@ -788,7 +788,7 @@ components:
           type: string
           example: Bearer
         guardian:
-          $ref: "#/components/schemas/Guardian"
+          $ref: '#/components/schemas/Guardian'
 
     Guardian:
       type: object
@@ -826,7 +826,7 @@ components:
           type: string
           example: Bearer
         admin:
-          $ref: "#/components/schemas/Admin"
+          $ref: '#/components/schemas/Admin'
 
     Admin:
       type: object
@@ -879,14 +879,8 @@ components:
           type: string
         avatar:
           type: string
-        language_id:
-          type: integer
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
+        language:
+          $ref: '#/components/schemas/LookupItem'
 
     # ---------- Exercise ----------
     ExerciseCreateRequest:
@@ -923,18 +917,12 @@ components:
           format: uuid
         title:
           type: string
-        language_id:
-          type: integer
-        exercise_type_id:
-          type: integer
+        language:
+          $ref: '#/components/schemas/LookupItem'
+        type:
+          $ref: '#/components/schemas/LookupItem'
         is_active:
           type: boolean
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
 
     # ---------- Task ----------
     TaskCreateRequest:
@@ -977,19 +965,19 @@ components:
 
     TaskDetail:
       allOf:
-        - $ref: "#/components/schemas/Task"
+        - $ref: '#/components/schemas/Task'
         - type: object
           properties:
             words:
               type: array
               items:
-                $ref: "#/components/schemas/WordTaskEntry"
+                $ref: '#/components/schemas/WordTaskEntry'
 
     WordTaskEntry:
       type: object
       properties:
         word:
-          $ref: "#/components/schemas/Word"
+          $ref: '#/components/schemas/Word'
         position:
           type: integer
 
@@ -1030,17 +1018,17 @@ components:
         text:
           type: string
         language:
-          $ref: "#/components/schemas/LookupItem"
+          $ref: '#/components/schemas/LookupItem'
 
     WordDetail:
       allOf:
-        - $ref: "#/components/schemas/Word"
+        - $ref: '#/components/schemas/Word'
         - type: object
           properties:
             image:
-              $ref: "#/components/schemas/Image"
+              $ref: '#/components/schemas/Image'
             audio:
-              $ref: "#/components/schemas/Audio"
+              $ref: '#/components/schemas/Audio'
 
     ImageUpsertRequest:
       type: object
@@ -1106,7 +1094,7 @@ components:
           type: string
           format: uuid
         status:
-          $ref: "#/components/schemas/LookupItem"
+          $ref: '#/components/schemas/LookupItem'
         score:
           type: integer
           minimum: 0

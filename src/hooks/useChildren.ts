@@ -10,17 +10,17 @@ export const CHILDREN_QUERY_KEY = ["children"] as const;
  * Nutzt TanStack Query für automatisches Caching, Ladezustände und Fehlerbehandlung.
  */
 export const useChildren = () => {
-  const { isAuthenticated } = useAuth();
+  // const { isAuthenticated } = useAuth();
+  const { isAuthenticated, role } = useAuth();
 
   return useQuery({
     queryKey: CHILDREN_QUERY_KEY,
     queryFn: childService.getChildren,
     // Die Query wird nur ausgeführt, wenn der Nutzer tatsächlich eingeloggt ist
-    enabled: isAuthenticated,
+    // enabled: isAuthenticated,
+    enabled: isAuthenticated && role === "guardian",
   });
 };
-
-
 
 /*
 3. Wie dieser Hook in einer UI-Komponente genutzt wird

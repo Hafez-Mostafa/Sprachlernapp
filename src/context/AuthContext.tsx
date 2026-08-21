@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, type ReactNode } from "react";
+import { createContext, useState, useEffect, type ReactNode } from "react";
 import { authService } from "../services/auth.service";
 import { guardianService } from "../services/guardian.service";
 import { adminService } from "../services/admin.service";
@@ -17,20 +17,31 @@ import type { LoginRequest } from "../types";
 // Datengefäß für den Auth-Kontext erstellen (Standardwert ist undefined)
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Feste Schlüssel-Namen für den Browser-Speicher (localStorage) zur Vermeidung von Tippfehlern
-const TOKEN_KEY = "auth_token";
+// Getrennte Token-Keys pro Rolle -> passend zu den zwei API-Clients
+// (apiClient liest "guardian_token", adminApiClient liest "admin_token")
+const GUARDIAN_TOKEN_KEY = "guardian_token";
+const ADMIN_TOKEN_KEY = "admin_token";
 const ROLE_KEY = "auth_role";
+
+// Hilfsfunktion: liefert den passenden Token-Key je nach Rolle
+const tokenKeyForRole = (role: UserRole): string =>
+  role === "guardian" ? GUARDIAN_TOKEN_KEY : ADMIN_TOKEN_KEY;
 
 // =======================================================
 // 2. AuthProvider-Komponente
 // =======================================================
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  // Initialer State für die Authentifizierung
+  // Initialer State: Rolle zuerst auslesen, dann das dazu passende Token
+  const initialRole = localStorage.getItem(ROLE_KEY) as UserRole | null;
+  const initialToken = initialRole
+    ? localStorage.getItem(tokenKeyForRole(initialRole))
+    : null;
+
   const [state, setState] = useState<AuthState>({
     user: null,
     role: null,
-    token: localStorage.getItem(TOKEN_KEY), // Liest bereits vorhandenes Token aus
+    token: initialToken,
     isLoading: true,                         // Zeigt an, dass die Session-Prüfung läuft
     isAuthenticated: false,                  // Standardmäßig unauthentifiziert
   });
@@ -40,12 +51,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // =======================================================
   useEffect(() => {
     const initAuth = async () => {
-      // Token und Rolle aus dem LocalStorage auslesen
-      const storedToken = localStorage.getItem(TOKEN_KEY);
       const storedRole = localStorage.getItem(ROLE_KEY) as UserRole | null;
 
-      // Wenn kein Token oder keine Rolle vorhanden ist: Prüfvorgang beenden
-      if (!storedToken || !storedRole) {
+      // Ohne Rolle kann kein passender Token-Key bestimmt werden
+      if (!storedRole) {
+        setState((prev) => ({ ...prev, isLoading: false }));
+        return;
+      }
+
+      const storedToken = localStorage.getItem(tokenKeyForRole(storedRole));
+
+      if (!storedToken) {
         setState((prev) => ({ ...prev, isLoading: false }));
         return;
       }
@@ -89,8 +105,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     if (!token) throw new Error("Kein Token in der Antwort enthalten.");
 
-    // 2. Token und Rolle dauerhaft im Browser speichern
-    localStorage.setItem(TOKEN_KEY, token);
+    // 2. Token unter eigenem Guardian-Key speichern + Rolle merken
+    localStorage.setItem(GUARDIAN_TOKEN_KEY, token);
     localStorage.setItem(ROLE_KEY, "guardian");
 
     // 3. Profildaten laden
@@ -116,8 +132,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     if (!token) throw new Error("Kein Token in der Antwort enthalten.");
 
-    // 2. Token und Rolle dauerhaft im Browser speichern
-    localStorage.setItem(TOKEN_KEY, token);
+    // 2. Token unter eigenem Admin-Key speichern + Rolle merken
+    localStorage.setItem(ADMIN_TOKEN_KEY, token);
     localStorage.setItem(ROLE_KEY, "admin");
 
     // 3. Profildaten laden
@@ -137,8 +153,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // 6. Logout-Funktion
   // =======================================================
   const logout = () => {
-    // 1. LocalStorage leeren
-    localStorage.removeItem(TOKEN_KEY);
+    // 1. Beide Token-Keys + Rolle leeren (unabhängig davon, welche Rolle aktiv war)
+    localStorage.removeItem(GUARDIAN_TOKEN_KEY);
+    localStorage.removeItem(ADMIN_TOKEN_KEY);
     localStorage.removeItem(ROLE_KEY);
 
     // 2. React-State auf Ausgangszustand zurücksetzen

@@ -4,11 +4,17 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./context/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { MainLayout } from "./components/MainLayout";
+import { useDocumentDirection } from "./hooks/useDocumentDirection";
+import { LoginPage } from "./pages/LoginPage";
+import { RegisterPage } from "./pages/RegisterPage";
+import { ProfileSelectionPage } from "./pages/ProfileSelectionPage";
+import { ChildDashboardPage } from "./pages/ChildDashboardPage";
+
+
+
 
 // Dummy-Komponenten für den ersten Test
-const LoginPage = () => <h2>Login-Seite</h2>;
 
-const DashboardPage = () => <h2>Willkommen im Dashboard!</h2>;
 const ChildrenPage = () => <h2>Kinder-Übersicht</h2>;
 const AdminPage = () => <h2>Admin-Verwaltung</h2>;
 const UnauthorizedPage = () => <h2>403 - Keine Berechtigung für diese Seite</h2>;
@@ -23,6 +29,8 @@ const queryClient = new QueryClient({
 });
 
 export const App: React.FC = () => {
+    useDocumentDirection();
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
@@ -30,6 +38,7 @@ export const App: React.FC = () => {
           <Routes>
             {/* Öffentliche Route */}
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
             {/* Geschützte Routen innerhalb des MainLayouts */}
@@ -41,7 +50,8 @@ export const App: React.FC = () => {
               }
             >
               {/* Routen für alle angemeldeten Nutzer */}
-              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/dashboard" element={<ProfileSelectionPage />} />
+
 
               {/* Spezifische Rollen-Routen */}
               <Route
@@ -61,6 +71,14 @@ export const App: React.FC = () => {
                 }
               />
             </Route>
+            <Route
+              path="/children/:childId"
+              element={
+                <ProtectedRoute allowedRoles={["guardian"]}>
+                  <ChildDashboardPage />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Default-Redirect */}
             <Route path="*" element={<Navigate to="/dashboard" replace />} />

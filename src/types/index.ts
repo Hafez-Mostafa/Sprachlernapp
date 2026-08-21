@@ -49,7 +49,6 @@ export type Audio = components["schemas"]["Audio"];
 export type WordId = components["parameters"]["WordId"];
 // Progress
 export type LearningProgress = components["schemas"]["LearningProgress"];
-["LearningProgress"];
 
 export type ChildId = components["parameters"]["ChildId"];
 

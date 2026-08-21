@@ -1,0 +1,80 @@
+{
+  "app": {
+    "name": "LernApp"
+  },
+  "nav": {
+    "dashboard": "لوحة التحكم",
+    "children": "أطفالي",
+    "admin": "الإدارة",
+    "logout": "تسجيل الخروج"
+  },
+  "auth": {
+    "loginTitle": "تسجيل الدخول",
+    "welcomeTitle": "أهلاً بك!",
+    "subtitle": "منطقة الآباء لدعم تعلم اللغة",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "loginButton": "تسجيل الدخول",
+    "createAccountButton": "إنشاء حساب جديد",
+    "dsgvoLabel": "أوافق على سياسة حماية البيانات (DSGVO)",
+    "dsgvoRequired": "يرجى الموافقة على سياسة حماية البيانات للمتابعة.",
+    "registerTitle": "إنشاء حساب",
+    "registerButton": "تسجيل",
+    "backToLogin": "لديك حساب بالفعل؟ تسجيل الدخول",
+    "passwordMismatch": "كلمتا المرور غير متطابقتين.",
+    "emailAlreadyRegistered": "هذا البريد الإلكتروني مسجل بالفعل.",
+    "registrationValidationError": "يرجى التحقق من بياناتك (مثال: كلمة المرور قصيرة جدًا).",
+    "loggedInAs": "مسجل الدخول باسم {{email}}",
+    "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+    "sessionExpired": "انتهت صلاحية الجلسة. يرجى تسجيل الدخول مرة أخرى."
+  },
+  "children": {
+    "title": "نظرة عامة على الأطفال",
+    "whoIsLearning": "من سيتعلم اليوم؟",
+    "tapYourPicture": "اضغط على صورتك!",
+    "guardiansOnly": "للآباء فقط",
+    "empty": "لم يتم إنشاء أي ملف تعريف للطفل بعد.",
+    "add": "إضافة طفل",
+    "nickname": "الاسم المستعار",
+    "language": "لغة التعلم",
+    "avatar": "الصورة الرمزية",
+    "confirmDelete": "هل تريد حقًا حذف ملف الطفل \"{{nickname}}\"؟"
+  },
+  "dashboard": {
+    "welcome": "مرحبًا بعودتك، {{name}}!",
+    "progressOverview": "نظرة عامة على تقدم التعلم",
+    "yourWorlds": "عوالمك",
+    "continueLearning": "متابعة التعلم",
+    "start": "ابدأ",
+    "noExercises": "لا توجد تمارين متاحة بعد."
+  },
+
+  "exercise": {
+    "question": "السؤال",
+    "yourAnswer": "إجابتك",
+    "submit": "إرسال الإجابة",
+    "correct": "أحسنت!",
+    "pointsForYou": "نقاط لك!",
+    "practicePronunciation": "تدرّب على النطق (اختياري)",
+    "nextTask": "المهمة التالية",
+    "incorrectFirstTry": "قريب من الصحيح! حاول مرة أخرى.",
+    "tryAgain": "حاول مرة أخرى",
+    "hereIsTheSolution": "إليك الحل:",
+    "listenSolutionAndContinue": "استمع إلى الحل وتابع"
+  },
+  "common": {
+    "loading": "جارٍ التحميل…",
+    "error": "حدث خطأ ما.",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "back": "رجوع"
+  },
+  "language": {
+    "switchLabel": "اللغة",
+    "de": "الألمانية",
+    "ar": "العربية"
+  }
+}

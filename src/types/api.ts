@@ -1466,7 +1466,11 @@ export interface components {
             guardian_id?: string;
             nickname?: string;
             avatar?: string;
-            language?: components["schemas"]["LookupItem"];
+            language_id?: number;
+            /** Format: date-time */
+            created_at?: string;
+            /** Format: date-time */
+            updated_at?: string;
         };
         ExerciseCreateRequest: {
             title: string;
@@ -1485,9 +1489,13 @@ export interface components {
             /** Format: uuid */
             exercise_id?: string;
             title?: string;
-            language?: components["schemas"]["LookupItem"];
-            type?: components["schemas"]["LookupItem"];
+            language_id?: number;
+            exercise_type_id?: number;
             is_active?: boolean;
+            /** Format: date-time */
+            created_at?: string;
+            /** Format: date-time */
+            updated_at?: string;
         };
         TaskCreateRequest: {
             question: string;
