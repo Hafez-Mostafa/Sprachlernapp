@@ -53,3 +53,4 @@ export type LearningProgress = components["schemas"]["LearningProgress"];
 export type ChildId = components["parameters"]["ChildId"];
 
 export type exerciseId = components["parameters"]["ExerciseId"];
+export type Language = components["schemas"]["Language"];

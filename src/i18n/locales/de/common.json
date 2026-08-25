@@ -29,6 +29,31 @@
     "invalidCredentials": "E-Mail oder Passwort ist falsch.",
     "sessionExpired": "Deine Sitzung ist abgelaufen. Bitte melde dich erneut an."
   },
+
+  "admin": {
+    "dashboardTitle": "Verwaltung",
+    "loginTitle": "Admin-Anmeldung",
+    "loginLinkLabel": "Admin-Anmeldung",
+    "backToGuardianLogin": "Zurück zur Eltern-Anmeldung",
+    "exercisesTitle": "Übungen",
+    "exercisesDescription": "Lernübungen anlegen, bearbeiten und Aufgaben verwalten",
+    "wordsTitle": "Wörter",
+    "wordsDescription": "Wortschatz inkl. Bild und Audio verwalten",
+    "addExercise": "Übung hinzufügen",
+    "editExercise": "Übung bearbeiten",
+    "exerciseTitle": "Titel",
+    "exerciseType": "Übungstyp",
+    "selectType": "Typ auswählen",
+    "typeMultipleChoice": "Multiple Choice",
+    "typeMatching": "Zuordnung",
+    "typeTextInput": "Texteingabe",
+    "isActive": "Aktiv",
+    "active": "Aktiv",
+    "inactive": "Inaktiv",
+    "manageTasks": "Aufgaben verwalten",
+    "noExercises": "Noch keine Übungen angelegt.",
+    "confirmDeleteExercise": "Übung \"{{title}}\" wirklich löschen?"
+  },
   "children": {
     "title": "Kinder-Übersicht",
     "whoIsLearning": "Wer lernt heute?",
@@ -39,7 +64,11 @@
     "nickname": "Spitzname",
     "language": "Lernsprache",
     "avatar": "Avatar",
-    "confirmDelete": "Kinderprofil \"{{nickname}}\" wirklich löschen?"
+    "confirmDelete": "Kinderprofil \"{{nickname}}\" wirklich löschen?",
+    "addTitle": "Kind hinzufügen",
+    "editTitle": "Kinderprofil bearbeiten",
+    "selectLanguage": "Sprache auswählen",
+    "optional": "optional"
   },
   "dashboard": {
     "welcome": "Willkommen zurück, {{name}}!",

@@ -1,10 +1,10 @@
 import { apiClient } from "../api/client";
-import { type LookupItem } from "../types";
+import { type LookupItem, type Language } from "../types";
 
 export const lookupService = {
-  // GET /languages - Sprachen
-  getLanguages: async (): Promise<LookupItem[]> => {
-    const response = await apiClient.get<LookupItem[]>("/languages");
+  // GET /languages - Sprachen (eigenes Schema, siehe types/index.ts)
+  getLanguages: async (): Promise<Language[]> => {
+    const response = await apiClient.get<Language[]>("/languages");
     return response.data;
   },
 

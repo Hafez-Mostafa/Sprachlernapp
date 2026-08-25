@@ -2,7 +2,7 @@ import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useChild } from "../hooks/useChild";
-import { useExercises } from "../hooks/Useexercises"
+import { useExercises } from "../hooks/useExercises"
 import { WorldCard } from "../components/WorldCard";
 import { ContinueLearningBanner } from "../components/ContinueLearningBanner";
 import type { ChildId } from "../types";
@@ -49,9 +49,7 @@ export const ChildDashboardPage: React.FC = () => {
           {recommendedExercise && (
             <ContinueLearningBanner
               exerciseTitle={recommendedExercise.title ?? ""}
-              onStart={() =>
-                navigate(`/exercises/${recommendedExercise.exercise_id}`)
-              }
+              onStart={() => navigate(`/children/${childId}/exercises/${recommendedExercise.exercise_id}`)}
             />
           )}
 
@@ -66,9 +64,7 @@ export const ChildDashboardPage: React.FC = () => {
                     key={exercise.exercise_id}
                     title={exercise.title ?? ""}
                     colorIndex={index}
-                    onClick={() =>
-                      navigate(`/exercises/${exercise.exercise_id}`)
-                    }
+                    onClick={() => navigate(`/children/${childId}/exercises/${exercise.exercise_id}`)}
                   />
                 ))}
               </div>

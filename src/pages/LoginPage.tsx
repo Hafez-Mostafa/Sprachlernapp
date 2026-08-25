@@ -22,13 +22,25 @@ export const LoginPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const state = location.state as LocationState | null;
-  const redirectTo = state?.from?.pathname ?? "/dashboard";
+  const fromPath = state?.from?.pathname;
+  const redirectTo = fromPath ?? "/dashboard";
 
+  // Fix: Falls ProtectedRoute hierher umgeleitet hat, weil eigentlich eine
+  // Admin-Route (z.B. /admin/overview) aufgerufen wurde, gehört hier NICHT
+  // das Guardian-Formular gezeigt - stattdessen sofort zur echten
+  // Admin-Login-Seite weiterleiten, mit demselben Redirect-Ziel im State.
   React.useEffect(() => {
-    if (isAuthenticated) {
+    if (fromPath?.startsWith("/admin")) {
+      navigate("/admin/login", { replace: true, state: { from: state?.from } });
+    }
+  }, [fromPath, navigate, state]);
+
+  // Bereits eingeloggt (z.B. Reload auf /login) -> direkt weiterleiten
+  React.useEffect(() => {
+    if (isAuthenticated && !fromPath?.startsWith("/admin")) {
       navigate(redirectTo, { replace: true });
     }
-  }, [isAuthenticated, navigate, redirectTo]);
+  }, [isAuthenticated, navigate, redirectTo, fromPath]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -53,6 +65,12 @@ export const LoginPage: React.FC = () => {
       setIsSubmitting(false);
     }
   };
+
+  // Während der Weiterleitung zu /admin/login (siehe Effect oben) nichts rendern,
+  // damit das Guardian-Formular nicht kurz aufblitzt
+  if (fromPath?.startsWith("/admin")) {
+    return null;
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-white">
@@ -141,6 +159,13 @@ export const LoginPage: React.FC = () => {
             className="w-full rounded-xl border-2 border-indigo-600 py-3 text-center text-base font-semibold text-indigo-600 transition hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-600/50"
           >
             {t("auth.createAccountButton")}
+          </Link>
+
+          <Link
+            to="/admin/login"
+            className="text-center text-xs font-medium text-slate-400 hover:text-slate-600 hover:underline"
+          >
+            {t("admin.loginLinkLabel")}
           </Link>
         </form>
       </div>

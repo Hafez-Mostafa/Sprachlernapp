@@ -29,6 +29,31 @@
     "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
     "sessionExpired": "انتهت صلاحية الجلسة. يرجى تسجيل الدخول مرة أخرى."
   },
+
+  "admin": {
+    "dashboardTitle": "الإدارة",
+    "loginTitle": "تسجيل دخول المسؤول",
+    "loginLinkLabel": "تسجيل دخول المسؤول",
+    "backToGuardianLogin": "العودة لتسجيل دخول الآباء",
+    "exercisesTitle": "التمارين",
+    "exercisesDescription": "إنشاء وتعديل تمارين التعلم وإدارة المهام",
+    "wordsTitle": "الكلمات",
+    "wordsDescription": "إدارة المفردات بما في ذلك الصور والصوت",
+    "addExercise": "إضافة تمرين",
+    "editExercise": "تعديل التمرين",
+    "exerciseTitle": "العنوان",
+    "exerciseType": "نوع التمرين",
+    "selectType": "اختر النوع",
+    "typeMultipleChoice": "اختيار من متعدد",
+    "typeMatching": "مطابقة",
+    "typeTextInput": "إدخال نصي",
+    "isActive": "نشط",
+    "active": "نشط",
+    "inactive": "غير نشط",
+    "manageTasks": "إدارة المهام",
+    "noExercises": "لم يتم إنشاء أي تمارين بعد.",
+    "confirmDeleteExercise": "هل تريد حقًا حذف التمرين \"{{title}}\"؟"
+  },
   "children": {
     "title": "نظرة عامة على الأطفال",
     "whoIsLearning": "من سيتعلم اليوم؟",
@@ -39,7 +64,11 @@
     "nickname": "الاسم المستعار",
     "language": "لغة التعلم",
     "avatar": "الصورة الرمزية",
-    "confirmDelete": "هل تريد حقًا حذف ملف الطفل \"{{nickname}}\"؟"
+    "confirmDelete": "هل تريد حقًا حذف ملف الطفل \"{{nickname}}\"؟",
+    "addTitle": "إضافة طفل",
+    "editTitle": "تعديل ملف الطفل",
+    "selectLanguage": "اختر اللغة",
+    "optional": "اختياري"
   },
   "dashboard": {
     "welcome": "مرحبًا بعودتك، {{name}}!",

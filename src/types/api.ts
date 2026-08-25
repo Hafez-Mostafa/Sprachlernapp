@@ -1219,6 +1219,68 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/words/{wordId}/image/upload": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                wordId: components["parameters"]["WordId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        /** Bilddatei für ein Wort hochladen und speichern */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    wordId: components["parameters"]["WordId"];
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "multipart/form-data": {
+                        /** Format: binary */
+                        file: string;
+                        description?: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description Bild hochgeladen und gespeichert */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Image"];
+                    };
+                };
+                /** @description Ungültiger Dateityp oder keine Datei */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Wort nicht gefunden */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/words/{wordId}/audio": {
         parameters: {
             query?: never;
@@ -1283,6 +1345,67 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/words/{wordId}/audio/upload": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                wordId: components["parameters"]["WordId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        /** Audiodatei für ein Wort hochladen und speichern */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    wordId: components["parameters"]["WordId"];
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "multipart/form-data": {
+                        /** Format: binary */
+                        file: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description Audio hochgeladen und gespeichert */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Audio"];
+                    };
+                };
+                /** @description Ungültiger Dateityp oder keine Datei */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Wort nicht gefunden */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/languages": {
         parameters: {
             query?: never;
@@ -1306,7 +1429,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["LookupItem"][];
+                        "application/json": components["schemas"]["Language"][];
                     };
                 };
             };
@@ -1397,6 +1520,10 @@ export interface components {
     schemas: {
         LookupItem: {
             id?: number;
+            name?: string;
+        };
+        Language: {
+            app_language_id?: number;
             name?: string;
         };
         GuardianRegisterRequest: {
@@ -1541,11 +1668,13 @@ export interface components {
             /** Format: uuid */
             word_id?: string;
             text?: string;
-            language?: components["schemas"]["LookupItem"];
+            language_id?: number;
+            /** Format: date-time */
+            created_at?: string;
         };
         WordDetail: components["schemas"]["Word"] & {
-            image?: components["schemas"]["Image"];
-            audio?: components["schemas"]["Audio"];
+            images?: components["schemas"]["Image"][] | null;
+            audios?: components["schemas"]["Audio"][] | null;
         };
         ImageUpsertRequest: {
             /** Format: uri */
@@ -1582,7 +1711,7 @@ export interface components {
             child_id?: string;
             /** Format: uuid */
             task_id?: string;
-            status?: components["schemas"]["LookupItem"];
+            status_id?: number;
             score?: number;
             /** Format: date-time */
             completed_at?: string;

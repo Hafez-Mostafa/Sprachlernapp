@@ -26,9 +26,15 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <div>Aktivität wird geprüft...</div>;
   }
 
-  // 2. Nicht eingeloggt -> Zur Login-Seite leiten (inkl. Ziel-URL als State)
+  // 2. Nicht eingeloggt -> zur passenden Login-Seite leiten (inkl. Ziel-URL als State)
+  //    Fix: Admin-Routen (allowedRoles nur ["admin"]) schicken zur echten
+  //    Admin-Login-Seite statt zur Guardian-Login-Seite, damit man dort
+  //    nicht auf das falsche Formular trifft.
   if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    const isAdminOnlyRoute =
+      allowedRoles?.length === 1 && allowedRoles[0] === "admin";
+    const loginPath = isAdminOnlyRoute ? "/admin/login" : "/login";
+    return <Navigate to={loginPath} state={{ from: location }} replace />;
   }
 
   // 3. Eingeloggt, aber falsche Rolle (z. B. Guardian versucht Admin-Seite zu öffnen)
@@ -39,14 +45,3 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // 4. Alles gültig -> Die geschützte Seite wird gerendert
   return <>{children}</>;
 };
-
-
-
-
-
-
-
-
-
-
-

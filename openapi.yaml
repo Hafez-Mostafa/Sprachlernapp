@@ -625,6 +625,38 @@ paths:
         "204":
           description: Gelöscht
 
+  /words/{wordId}/image/upload:
+    parameters:
+      - $ref: "#/components/parameters/WordId"
+    put:
+      tags: [Words]
+      summary: Bilddatei für ein Wort hochladen und speichern
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+                description:
+                  type: string
+      responses:
+        "200":
+          description: Bild hochgeladen und gespeichert
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Image"
+        "400":
+          description: Ungültiger Dateityp oder keine Datei
+        "404":
+          description: Wort nicht gefunden
+
   /words/{wordId}/audio:
     parameters:
       - $ref: "#/components/parameters/WordId"
@@ -653,6 +685,36 @@ paths:
         "204":
           description: Gelöscht
 
+  /words/{wordId}/audio/upload:
+    parameters:
+      - $ref: "#/components/parameters/WordId"
+    put:
+      tags: [Words]
+      summary: Audiodatei für ein Wort hochladen und speichern
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Audio hochgeladen und gespeichert
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Audio"
+        "400":
+          description: Ungültiger Dateityp oder keine Datei
+        "404":
+          description: Wort nicht gefunden
+
   # ============================================================
   # LOOKUPS (Referenzdaten für Dropdowns etc.)
   # ============================================================
@@ -668,7 +730,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/LookupItem"
+                  $ref: "#/components/schemas/Language"
 
   /exercise-types:
     get:
@@ -751,6 +813,17 @@ components:
       type: object
       properties:
         id:
+          type: integer
+        name:
+          type: string
+
+    # Eigenes Schema statt LookupItem, da /languages ein anderes
+    # Primärschlüssel-Feld liefert (verifiziert per curl, 25.08.2026):
+    # [{"app_language_id":1,"name":"DE"},{"app_language_id":2,"name":"AR"}]
+    Language:
+      type: object
+      properties:
+        app_language_id:
           type: integer
         name:
           type: string
@@ -1029,18 +1102,27 @@ components:
           format: uuid
         text:
           type: string
-        language:
-          $ref: "#/components/schemas/LookupItem"
+        language_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
 
     WordDetail:
       allOf:
         - $ref: "#/components/schemas/Word"
         - type: object
           properties:
-            image:
-              $ref: "#/components/schemas/Image"
-            audio:
-              $ref: "#/components/schemas/Audio"
+            images:
+              type: array
+              items:
+                $ref: "#/components/schemas/Image"
+              nullable: true
+            audios:
+              type: array
+              items:
+                $ref: "#/components/schemas/Audio"
+              nullable: true
 
     ImageUpsertRequest:
       type: object
@@ -1105,8 +1187,8 @@ components:
         task_id:
           type: string
           format: uuid
-        status:
-          $ref: "#/components/schemas/LookupItem"
+        status_id:
+          type: integer
         score:
           type: integer
           minimum: 0
