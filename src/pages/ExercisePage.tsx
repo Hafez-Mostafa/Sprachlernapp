@@ -21,17 +21,33 @@ export const ExercisePage: React.FC = () => {
   }>();
   const navigate = useNavigate();
 
-  const { data: exercise } = useExercise(exerciseId as ExerciseIdType);
-  const { data: tasks } = useExerciseTasks(exerciseId as ExerciseIdType);
+  const {
+    data: exercise,
+    isLoading: isExerciseLoading,
+    isError: isExerciseError,
+  } = useExercise(exerciseId as ExerciseIdType);
+  const {
+    data: tasks,
+    isLoading: areTasksLoading,
+    isError: areTasksError,
+  } = useExerciseTasks(exerciseId as ExerciseIdType);
 
   const [taskIndex, setTaskIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>("answering");
   const [attempt, setAttempt] = useState(1);
 
   const currentTaskSummary = tasks?.[taskIndex];
-  const { data: task } = useTask(currentTaskSummary?.task_id as TaskId);
+  const {
+    data: task,
+    isLoading: isTaskLoading,
+    isError: isTaskError,
+  } = useTask(currentTaskSummary?.task_id as TaskId);
 
   const totalTasks = tasks?.length ?? 0;
+  const isLoading =
+    isExerciseLoading ||
+    areTasksLoading ||
+    (Boolean(currentTaskSummary) && isTaskLoading);
 
   const goToDashboard = () => navigate(`/children/${childId}`);
 
@@ -73,10 +89,42 @@ export const ExercisePage: React.FC = () => {
     }
   };
 
-  if (!exercise || !tasks || !task) {
+  if (isExerciseError || areTasksError || isTaskError) {
+    return (
+      <div className="mx-auto max-w-md py-16 text-center text-red-600">
+        Die Übung konnte nicht geladen werden. Bitte versuche es später erneut.
+      </div>
+    );
+  }
+
+  if (isLoading) {
     return (
       <div className="mx-auto max-w-md py-16 text-center text-slate-500">
         Wird geladen…
+      </div>
+    );
+  }
+
+  if (!exercise) {
+    return (
+      <div className="mx-auto max-w-md py-16 text-center text-slate-500">
+        Diese Übung konnte nicht gefunden werden.
+      </div>
+    );
+  }
+
+  if (!tasks || totalTasks === 0) {
+    return (
+      <div className="mx-auto max-w-md py-16 text-center text-slate-500">
+        Für diese Übung sind noch keine Aufgaben vorhanden.
+      </div>
+    );
+  }
+
+  if (!currentTaskSummary || !task) {
+    return (
+      <div className="mx-auto max-w-md py-16 text-center text-slate-500">
+        Die aktuelle Aufgabe konnte nicht geladen werden.
       </div>
     );
   }

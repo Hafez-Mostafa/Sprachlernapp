@@ -17,6 +17,10 @@ import { ChildrenManagementPage } from "./pages/ChildrenManagementPage";
 import { ExercisePage } from "./pages/ExercisePage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import ExercisesAdminPage from "./pages/ExercisesAdminPage";
+import { TasksAdminPage } from "./pages/TasksAdminPage";
+import { WordsAdminPage } from "./pages/WordsAdminPage";
+
+
 
 // Einfache Platzhalter-Seite für 403 - nutzt i18n, damit sie zur restlichen App passt
 const UnauthorizedPage: React.FC = () => {
@@ -103,10 +107,24 @@ export const App: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
-              {/* TODO: /admin/exercises/:exerciseId/tasks - Tasks-Verwaltung,
-                  noch nicht gebaut. Der "Aufgaben verwalten"-Button in
-                  ExercisesAdminPage verlinkt bereits dorthin. */}
+              <Route
+                path="/admin/words"
+                element={
+                  <ProtectedRoute allowedRoles={["admin"]}>
+                    <WordsAdminPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/exercises/:exerciseId/tasks"
+                element={
+                  <ProtectedRoute allowedRoles={["admin"]}>
+                    <TasksAdminPage />
+                  </ProtectedRoute>
+                }
+              />
             </Route>
+
 
             {/* ---------------------------------------------------- */}
             {/* Geschützte Route OHNE MainLayout                      */}

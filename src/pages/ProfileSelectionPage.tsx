@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useChildren } from "../hooks/useChildren";
 import { useAuth } from "../hooks/useAuth";
@@ -7,20 +7,15 @@ import { AvatarButton } from "../components/AvatarButton";
 
 export const ProfileSelectionPage: React.FC = () => {
   const { t } = useTranslation();
-  const { role, user } = useAuth();
+  const { role } = useAuth();
   const navigate = useNavigate();
   const { data: children, isLoading, isError } = useChildren();
 
-  // Admins landen ebenfalls auf /dashboard, sehen aber keine Profilauswahl
-  // (die hat für sie keine fachliche Bedeutung) - stattdessen ein einfacher Hinweis.
-  if (role !== "guardian") {
-    return (
-      <div className="mx-auto max-w-xl rounded-2xl bg-white p-8 text-center shadow-sm">
-        <h1 className="text-xl font-semibold text-slate-900">
-          {t("dashboard.welcome", { name: user?.email ?? "" })}
-        </h1>
-      </div>
-    );
+  // Admins landen technisch auch auf /dashboard (gemeinsame Route für alle
+  // authentifizierten Nutzer), fachlich gehört ihr Bereich aber nach
+  // /admin/overview - direkt dorthin weiterleiten statt einen Platzhalter zu zeigen.
+  if (role === "admin") {
+    return <Navigate to="/admin/overview" replace />;
   }
 
   return (
@@ -70,3 +65,4 @@ export const ProfileSelectionPage: React.FC = () => {
 };
 
 export default ProfileSelectionPage;
+

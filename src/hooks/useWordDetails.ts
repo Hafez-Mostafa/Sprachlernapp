@@ -25,10 +25,21 @@ export const useWordDetails = (wordIds: WordId[]) => {
 
 // Hilfsfunktion: erstes Bild/Audio aus dem Array holen, unabhängig davon
 // ob images/audios null, undefined oder ein Array ist.
+type WordWithMedia = {
+  images?: { url?: string }[] | null;
+  audios?: { url?: string }[] | null;
+  image?: { url?: string } | null;
+  audio?: { url?: string } | null;
+  word_id?: string;
+  text?: string;
+  language_id?: number;
+  created_at?: string;
+};
+
 export const firstImageUrl = (
-  word: { images?: { url?: string }[] | null } | undefined,
-): string | undefined => word?.images?.[0]?.url;
+  word: WordWithMedia | undefined,
+): string | undefined => word?.images?.[0]?.url ?? word?.image?.url;
 
 export const firstAudioUrl = (
-  word: { audios?: { url?: string }[] | null } | undefined,
-): string | undefined => word?.audios?.[0]?.url;
+  word: WordWithMedia | undefined,
+): string | undefined => word?.audios?.[0]?.url ?? word?.audio?.url;

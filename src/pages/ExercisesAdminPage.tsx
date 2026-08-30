@@ -5,7 +5,7 @@ import { useExercisesAdmin } from "../hooks/useExercisesAdmin";
 
 import { useCreateExercise, useDeleteExercise, useUpdateExercise } from "../hooks/useExerciseAdminMutations";
 import type { Exercise } from "../types";
-import { ExerciseFormModal } from "./ExerciseFormModal";
+import { ExerciseFormModal } from "../components/ExerciseFormModal";
 import { EXERCISE_TYPE_ID } from "../constants/exerciseType";
 
 
