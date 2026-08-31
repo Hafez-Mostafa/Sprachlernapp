@@ -31,7 +31,7 @@ export const ChildFormModal: React.FC<ChildFormModalProps> = ({
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (!nickname.trim() || languageId === "") return;
+    if (!nickname.trim() || languageId === "" || Number.isNaN(languageId)) return;
     onSubmit({
       nickname: nickname.trim(),
       avatar: avatar.trim() || undefined,
@@ -84,7 +84,7 @@ export const ChildFormModal: React.FC<ChildFormModalProps> = ({
                 {t("children.selectLanguage")}
               </option>
               {languages?.map((lang) => (
-                <option key={lang.app_language_id} value={lang.app_language_id}>
+                <option key={lang.id} value={lang.id}>
                   {lang.name}
                 </option>
               ))}

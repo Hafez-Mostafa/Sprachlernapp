@@ -7,7 +7,7 @@ import {
   useUpdateWordAdmin,
   useDeleteWordAdmin,
 } from "../hooks/useWordAdminMutations";
-import { useWordDetails, firstImageUrl } from "../hooks/useWordDetails";
+import { firstImageUrl } from "../hooks/useWordDetails";
 import { WordFormModal } from "../components/WordFormModal";
 import { WordMediaModal } from "../components/WordMediaModal";
 import type { Word, WordId } from "../types";
@@ -22,20 +22,6 @@ export const WordsAdminPage: React.FC = () => {
   const { data: words, isLoading, isError } = useWordsAdmin(
     languageFilter === "" ? undefined : languageFilter,
     search,
-  );
-
-  // Fix: GET /words (Liste) liefert kein image/audio - das gibt es nur auf
-  // GET /words/{id} (WordDetail). Für die Thumbnails in der Liste müssen wir
-  // also pro Wort einzeln die Details nachladen und per word_id zuordnen.
-  const wordIds =
-    words
-      ?.map((word) => word.word_id)
-      .filter((id): id is WordId => Boolean(id)) ?? [];
-  const { data: wordDetails } = useWordDetails(wordIds);
-  const wordDetailMap = new Map(
-    (wordDetails ?? [])
-      .filter((detail): detail is NonNullable<typeof detail> => Boolean(detail))
-      .map((detail) => [detail.word_id, detail]),
   );
 
   const createWord = useCreateWordAdminMutation();
@@ -122,7 +108,9 @@ export const WordsAdminPage: React.FC = () => {
         >
           <option value="">{t("admin.allLanguages")}</option>
           {languages?.map((lang) => (
+            // <option key={lang.app_language_id} value={lang.app_language_id}>
             <option key={lang.id} value={lang.id}>
+
               {lang.name}
             </option>
           ))}
@@ -137,11 +125,7 @@ export const WordsAdminPage: React.FC = () => {
           {words && words.length > 0 ? (
             <ul className="flex flex-col gap-2">
               {words.map((word) => {
-                // Fix: Bild aus dem nachgeladenen WordDetail holen, nicht aus dem
-                // Listen-Objekt "word" selbst (das hat kein image-Feld).
-                const imageUrl = firstImageUrl(
-                  wordDetailMap.get(word.word_id ?? ""),
-                );
+                const imageUrl = firstImageUrl(word);
                 return (
                   <li
                     key={word.word_id}

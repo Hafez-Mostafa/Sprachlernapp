@@ -37,12 +37,11 @@ export const WordMediaModal: React.FC<WordMediaModalProps> = ({
   const [audioUrl, setAudioUrl] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [audioFile, setAudioFile] = useState<File | null>(null);
-  const [hasSavedImage, setHasSavedImage] = useState(Boolean(firstImageUrl(wordDetail)));
 
   const currentImageUrl = firstImageUrl(wordDetail);
   const currentAudioUrl = firstAudioUrl(wordDetail);
+  const hasSavedImage = Boolean(currentImageUrl);
 
-  // Eingabefelder mit den aktuell gesetzten URLs vorbefüllen, sobald geladen
   useEffect(() => {
     setImageUrl(currentImageUrl ?? "");
   }, [currentImageUrl]);
@@ -51,15 +50,10 @@ export const WordMediaModal: React.FC<WordMediaModalProps> = ({
     setAudioUrl(currentAudioUrl ?? "");
   }, [currentAudioUrl]);
 
-  useEffect(() => {
-    setHasSavedImage(Boolean(currentImageUrl));
-  }, [currentImageUrl]);
-
   const handleSaveImage = () => {
     if (imageFile) {
       uploadImage.mutate(imageFile, {
         onSuccess: () => {
-          setHasSavedImage(true);
           setImageFile(null);
           setImageUrl("");
         },
@@ -68,12 +62,10 @@ export const WordMediaModal: React.FC<WordMediaModalProps> = ({
     }
 
     if (!imageUrl.trim()) return;
-    upsertImage.mutate({ url: imageUrl.trim() }, {
-      onSuccess: () => {
-        setHasSavedImage(true);
-        setImageUrl("");
-      },
-    });
+    upsertImage.mutate(
+      { url: imageUrl.trim() },
+      { onSuccess: () => setImageUrl("") },
+    );
   };
 
   const handleSaveAudio = () => {
@@ -88,11 +80,10 @@ export const WordMediaModal: React.FC<WordMediaModalProps> = ({
     }
 
     if (!audioUrl.trim()) return;
-    upsertAudio.mutate({ url: audioUrl.trim() }, {
-      onSuccess: () => {
-        setAudioUrl("");
-      },
-    });
+    upsertAudio.mutate(
+      { url: audioUrl.trim() },
+      { onSuccess: () => setAudioUrl("") },
+    );
   };
 
   return (
@@ -100,6 +91,15 @@ export const WordMediaModal: React.FC<WordMediaModalProps> = ({
       <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
         <h2 className="text-lg font-bold text-slate-900">{wordText}</h2>
         <p className="text-sm text-slate-500">{t("admin.mediaSubtitle")}</p>
+
+        {/* Sanfter Hinweis statt Hard-Block: der Zurück-Button bleibt immer
+            klickbar, damit ein Admin das Modal nie "gefangen" verlassen kann,
+            selbst wenn (noch) kein Bild gesetzt ist. */}
+        {!hasSavedImage && !isLoading && (
+          <p className="mt-2 text-xs font-medium text-amber-600">
+            {t("admin.imageRecommendedHint")}
+          </p>
+        )}
 
         {isLoading ? (
           <p className="mt-4 text-sm text-slate-400">{t("common.loading")}</p>
@@ -219,13 +219,13 @@ export const WordMediaModal: React.FC<WordMediaModalProps> = ({
           </div>
         )}
 
+        {/* Fix: nie mehr disabled - Zurück muss immer möglich sein */}
         <button
           type="button"
           onClick={onClose}
-          disabled={!hasSavedImage}
-          className="mt-6 w-full rounded-xl bg-slate-900 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-300"
+          className="mt-6 w-full rounded-xl bg-slate-900 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800"
         >
-          {hasSavedImage ? t("common.back") : "Bild zuerst speichern"}
+          {t("common.back")}
         </button>
       </div>
     </div>

@@ -45,7 +45,15 @@ export const ExerciseFormModal: React.FC<ExerciseFormModalProps> = ({
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (!title.trim() || languageId === "" || exerciseTypeId === "") return;
+    if (
+      !title.trim() ||
+      languageId === "" ||
+      Number.isNaN(languageId) ||
+      exerciseTypeId === "" ||
+      Number.isNaN(exerciseTypeId)
+    ) {
+      return;
+    }
     onSubmit({
       title: title.trim(),
       language_id: languageId,
@@ -99,7 +107,7 @@ export const ExerciseFormModal: React.FC<ExerciseFormModalProps> = ({
                 {t("children.selectLanguage")}
               </option>
               {languages?.map((lang) => (
-                <option key={lang.app_language_id} value={lang.app_language_id}>
+                <option key={lang.id} value={lang.id}>
                   {lang.name}
                 </option>
               ))}

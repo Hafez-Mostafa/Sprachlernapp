@@ -909,6 +909,59 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/tasks/{taskId}/words/bulk": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                taskId: components["parameters"]["TaskId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Mehrere Wörter einer Aufgabe zuordnen (bulk)
+         * @description Legt bis zu 200 Wort-Zuordnungen in einem Request an. Bereits bestehende Zuordnungen (task_id + word_id) werden übersprungen (skipDuplicates), kein Fehler bei Duplikaten.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    taskId: components["parameters"]["TaskId"];
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        words: {
+                            /** Format: uuid */
+                            word_id: string;
+                            position: number;
+                        }[];
+                    };
+                };
+            };
+            responses: {
+                /** @description Zuordnungen erstellt */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["WordTaskEntry"][];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/tasks/{taskId}/words/{wordId}": {
         parameters: {
             query?: never;
@@ -1047,6 +1100,51 @@ export interface paths {
                     };
                     content: {
                         "application/json": components["schemas"]["Word"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/words/bulk": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Mehrere Wörter anlegen (bulk)
+         * @description Legt bis zu 200 Wörter in einem Request an. Duplikate (gleicher Text + gleiche Sprache) werden übersprungen (skipDuplicates), kein Fehler bei Duplikaten.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        words: components["schemas"]["WordCreateRequest"][];
+                    };
+                };
+            };
+            responses: {
+                /** @description Erstellt */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Word"][];
                     };
                 };
             };
@@ -1429,7 +1527,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["Language"][];
+                        "application/json": components["schemas"]["LookupItem"][];
                     };
                 };
             };
@@ -1520,10 +1618,6 @@ export interface components {
     schemas: {
         LookupItem: {
             id?: number;
-            name?: string;
-        };
-        Language: {
-            app_language_id?: number;
             name?: string;
         };
         GuardianRegisterRequest: {
@@ -1668,13 +1762,11 @@ export interface components {
             /** Format: uuid */
             word_id?: string;
             text?: string;
-            language_id?: number;
-            /** Format: date-time */
-            created_at?: string;
+            language?: components["schemas"]["LookupItem"];
         };
         WordDetail: components["schemas"]["Word"] & {
-            images?: components["schemas"]["Image"][] | null;
-            audios?: components["schemas"]["Audio"][] | null;
+            image?: components["schemas"]["Image"];
+            audio?: components["schemas"]["Audio"];
         };
         ImageUpsertRequest: {
             /** Format: uri */
@@ -1689,6 +1781,10 @@ export interface components {
             /** Format: uri */
             url?: string;
             description?: string;
+            /** @description Dateiformat laut Cloudinary (z. B. "jpg", "png"). Null bei manuell per URL gesetzten Bildern. */
+            format?: string | null;
+            /** @description Dateigröße in Bytes laut Cloudinary. Null bei manuell per URL gesetzten Bildern. */
+            bytes?: number | null;
         };
         AudioUpsertRequest: {
             /** Format: uri */
@@ -1703,6 +1799,10 @@ export interface components {
             /** Format: uri */
             url?: string;
             duration_ms?: number;
+            /** @description Dateiformat laut Cloudinary (z. B. "mp3", "wav"). Null bei manuell per URL gesetztem Audio. */
+            format?: string | null;
+            /** @description Dateigröße in Bytes laut Cloudinary. Null bei manuell per URL gesetztem Audio. */
+            bytes?: number | null;
         };
         LearningProgress: {
             /** Format: uuid */
@@ -1711,7 +1811,7 @@ export interface components {
             child_id?: string;
             /** Format: uuid */
             task_id?: string;
-            status_id?: number;
+            status?: components["schemas"]["LookupItem"];
             score?: number;
             /** Format: date-time */
             completed_at?: string;

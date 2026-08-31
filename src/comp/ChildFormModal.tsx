@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLanguages } from "../hooks/useLanguages";
-import type { Word } from "../types";
+import type { ChildProfile } from "../types";
 
-interface WordFormModalProps {
-  initialData?: Word;
+interface ChildFormModalProps {
+  initialData?: ChildProfile; // vorhanden = Bearbeiten-Modus, sonst Anlegen
   isSubmitting: boolean;
   errorMessage?: string | null;
-  onSubmit: (data: { text: string; language_id: number }) => void;
+  onSubmit: (data: { nickname: string; avatar?: string; language_id: number }) => void;
   onCancel: () => void;
 }
 
-export const WordFormModal: React.FC<WordFormModalProps> = ({
+export const ChildFormModal: React.FC<ChildFormModalProps> = ({
   initialData,
   isSubmitting,
   errorMessage,
@@ -21,26 +21,29 @@ export const WordFormModal: React.FC<WordFormModalProps> = ({
   const { t } = useTranslation();
   const { data: languages, isLoading: isLoadingLanguages } = useLanguages();
 
-  const [text, setText] = useState(initialData?.text ?? "");
-  // Fix: Word.language ist laut aktueller API wieder ein verschachteltes
-  // { id, name }-Objekt, kein flaches language_id mehr (Backend-Review 31.08.).
+  const [nickname, setNickname] = useState(initialData?.nickname ?? "");
+  const [avatar, setAvatar] = useState(initialData?.avatar ?? "");
   const [languageId, setLanguageId] = useState<number | "">(
-    initialData?.language?.id ?? "",
+    initialData?.language_id ?? "",
   );
 
   const isEditMode = Boolean(initialData);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (!text.trim() || languageId === "") return;
-    onSubmit({ text: text.trim(), language_id: languageId });
+    if (!nickname.trim() || languageId === "") return;
+    onSubmit({
+      nickname: nickname.trim(),
+      avatar: avatar.trim() || undefined,
+      language_id: languageId,
+    });
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
       <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
         <h2 className="text-lg font-bold text-slate-900">
-          {isEditMode ? t("admin.editWord") : t("admin.addWord")}
+          {isEditMode ? t("children.editTitle") : t("children.addTitle")}
         </h2>
 
         <form onSubmit={handleSubmit} className="mt-4 flex flex-col gap-4">
@@ -55,12 +58,12 @@ export const WordFormModal: React.FC<WordFormModalProps> = ({
 
           <label className="flex flex-col gap-1.5">
             <span className="text-sm font-medium text-slate-700">
-              {t("admin.wordText")}
+              {t("children.nickname")}
             </span>
             <input
               type="text"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
               required
               className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-base outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20"
             />
@@ -74,20 +77,31 @@ export const WordFormModal: React.FC<WordFormModalProps> = ({
               value={languageId}
               onChange={(e) => setLanguageId(Number(e.target.value))}
               required
-              disabled={isLoadingLanguages || isEditMode}
-              className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-base outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20 disabled:bg-slate-50"
+              disabled={isLoadingLanguages}
+              className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-base outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20"
             >
               <option value="" disabled>
                 {t("children.selectLanguage")}
               </option>
-              {/* Fix: Lookups liefern jetzt einheitlich { id, name } statt
-                  app_language_id/exercise_type_id/progress_status_id */}
               {languages?.map((lang) => (
                 <option key={lang.id} value={lang.id}>
                   {lang.name}
                 </option>
               ))}
             </select>
+          </label>
+
+          <label className="flex flex-col gap-1.5">
+            <span className="text-sm font-medium text-slate-700">
+              {t("children.avatar")} ({t("children.optional")})
+            </span>
+            <input
+              type="text"
+              value={avatar}
+              onChange={(e) => setAvatar(e.target.value)}
+              placeholder="https://..."
+              className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-base outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20"
+            />
           </label>
 
           <div className="mt-2 flex gap-3">
