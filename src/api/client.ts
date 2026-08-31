@@ -22,6 +22,12 @@ apiClient.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+
+  if (typeof FormData !== "undefined" && config.data instanceof FormData) {
+    delete config.headers["Content-Type"];
+    delete config.headers["content-type"];
+  }
+
   return config;
 });
 
@@ -54,6 +60,12 @@ adminApiClient.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+
+  if (typeof FormData !== "undefined" && config.data instanceof FormData) {
+    delete config.headers["Content-Type"];
+    delete config.headers["content-type"];
+  }
+
   return config;
 });
 
@@ -70,6 +82,21 @@ adminApiClient.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+
+export const requestWithTokenFallback = async <T>(
+  adminRequest: () => Promise<T>,
+  guardianRequest: () => Promise<T>,
+): Promise<T> => {
+  try {
+    return await adminRequest();
+  } catch (error: any) {
+    const status = error?.response?.status;
+    if (status === 401 || status === 403) {
+      return await guardianRequest();
+    }
+    throw error;
+  }
+};
 
 // import axios from "axios";
 

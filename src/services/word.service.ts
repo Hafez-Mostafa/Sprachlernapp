@@ -63,6 +63,25 @@ export const wordService = {
     await apiClient.delete(`/words/${wordId}/image`);
   },
 
+  // PUT /words/{wordId}/image/upload - Bild als Multipart-Datei hochladen
+  uploadWordImage: async (
+    wordId: WordId,
+    file: File,
+    description?: string,
+  ): Promise<Image> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    if (description) {
+      formData.append("description", description);
+    }
+
+    const response = await apiClient.put<Image>(
+      `/words/${wordId}/image/upload`,
+      formData,
+    );
+    return response.data;
+  },
+
   // PUT /words/{wordId}/audio - Audio setzen/ersetzen
   upsertWordAudio: async (
     wordId: WordId,
@@ -78,5 +97,17 @@ export const wordService = {
   // DELETE /words/{wordId}/audio - Audio entfernen
   deleteWordAudio: async (wordId: WordId): Promise<void> => {
     await apiClient.delete(`/words/${wordId}/audio`);
+  },
+
+  // PUT /words/{wordId}/audio/upload - Audio als Multipart-Datei hochladen
+  uploadWordAudio: async (wordId: WordId, file: File): Promise<Audio> => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await apiClient.put<Audio>(
+      `/words/${wordId}/audio/upload`,
+      formData,
+    );
+    return response.data;
   },
 };

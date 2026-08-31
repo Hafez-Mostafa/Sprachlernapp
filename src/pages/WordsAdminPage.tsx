@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLanguages } from "../hooks/useLanguages";
 import { useWordsAdmin } from "../hooks/useWordsAdmin";
+import { useWordDetails, firstImageUrl } from "../hooks/useWordDetails";
 import {
   useCreateWordAdminMutation,
   useUpdateWordAdmin,
   useDeleteWordAdmin,
 } from "../hooks/useWordAdminMutations";
-import { firstImageUrl } from "../hooks/useWordDetails";
 import { WordFormModal } from "../components/WordFormModal";
 import { WordMediaModal } from "../components/WordMediaModal";
 import type { Word, WordId } from "../types";
@@ -22,6 +22,14 @@ export const WordsAdminPage: React.FC = () => {
   const { data: words, isLoading, isError } = useWordsAdmin(
     languageFilter === "" ? undefined : languageFilter,
     search,
+  );
+  const wordIds =
+    words?.map((word) => word.word_id).filter((id): id is WordId => Boolean(id)) ?? [];
+  const { data: wordDetails } = useWordDetails(wordIds);
+  const wordDetailMap = new Map(
+    (wordDetails ?? [])
+      .filter((detail): detail is NonNullable<typeof detail> => Boolean(detail))
+      .map((detail) => [detail.word_id, detail]),
   );
 
   const createWord = useCreateWordAdminMutation();
@@ -51,7 +59,15 @@ export const WordsAdminPage: React.FC = () => {
 
   const handleSubmit = (data: { text: string; language_id: number }) => {
     if (modalMode === "create") {
-      createWord.mutate(data, { onSuccess: closeModal });
+      createWord.mutate(data, {
+        onSuccess: (newWord) => {
+          closeModal();
+          const newWordId = newWord?.word_id ?? null;
+          if (newWordId) {
+            setMediaWordId(newWordId);
+          }
+        },
+      });
     } else if (modalMode === "edit" && editingWord?.word_id) {
       updateWord.mutate(
         { wordId: editingWord.word_id, payload: { text: data.text } },
@@ -123,7 +139,7 @@ export const WordsAdminPage: React.FC = () => {
           {words && words.length > 0 ? (
             <ul className="flex flex-col gap-2">
               {words.map((word) => {
-                const imageUrl = firstImageUrl(word);
+                const imageUrl = firstImageUrl(wordDetailMap.get(word.word_id ?? ""));
                 return (
                   <li
                     key={word.word_id}

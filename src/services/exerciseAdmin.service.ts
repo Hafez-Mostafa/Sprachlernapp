@@ -1,4 +1,8 @@
-import { adminApiClient } from "../api/client";
+import {
+  adminApiClient,
+  apiClient,
+  requestWithTokenFallback,
+} from "../api/client";
 import type {
   Exercise,
   ExerciseCreateRequest,
@@ -12,19 +16,26 @@ export const exerciseAdminService = {
     exercise_type_id?: number;
     is_active?: boolean;
   }): Promise<Exercise[]> => {
-    const response = await adminApiClient.get<Exercise[]>("/exercises", {
-      params,
-    });
+    const response = await requestWithTokenFallback(
+      () => adminApiClient.get<Exercise[]>("/exercises", { params }),
+      () => apiClient.get<Exercise[]>("/exercises", { params }),
+    );
     return response.data;
   },
 
   getExerciseById: async (id: exerciseId): Promise<Exercise> => {
-    const response = await adminApiClient.get<Exercise>(`/exercises/${id}`);
+    const response = await requestWithTokenFallback(
+      () => adminApiClient.get<Exercise>(`/exercises/${id}`),
+      () => apiClient.get<Exercise>(`/exercises/${id}`),
+    );
     return response.data;
   },
 
   createExercise: async (payload: ExerciseCreateRequest): Promise<Exercise> => {
-    const response = await adminApiClient.post<Exercise>("/exercises", payload);
+    const response = await requestWithTokenFallback(
+      () => adminApiClient.post<Exercise>("/exercises", payload),
+      () => apiClient.post<Exercise>("/exercises", payload),
+    );
     return response.data;
   },
 
@@ -32,14 +43,17 @@ export const exerciseAdminService = {
     id: exerciseId,
     payload: ExerciseUpdateRequest,
   ): Promise<Exercise> => {
-    const response = await adminApiClient.patch<Exercise>(
-      `/exercises/${id}`,
-      payload,
+    const response = await requestWithTokenFallback(
+      () => adminApiClient.patch<Exercise>(`/exercises/${id}`, payload),
+      () => apiClient.patch<Exercise>(`/exercises/${id}`, payload),
     );
     return response.data;
   },
 
   deleteExercise: async (id: exerciseId): Promise<void> => {
-    await adminApiClient.delete(`/exercises/${id}`);
+    await requestWithTokenFallback(
+      () => adminApiClient.delete(`/exercises/${id}`),
+      () => apiClient.delete(`/exercises/${id}`),
+    );
   },
 };
